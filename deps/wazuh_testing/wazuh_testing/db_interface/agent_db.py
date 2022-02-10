@@ -246,6 +246,18 @@ def check_vulnerability_scan_inventory(agent_id, package, version, arch, cve, co
     return result
 
 
+def count_valid_inventory_vulnerabilities(agent_id='000'):
+    """Get the number of `vuln_cves` entries with status='VALID'
+
+    Args:
+        agent_id (str): Agent ID.
+
+    Returns:
+        int: Number of VALID entries.
+    """
+    return query_wdb(f"agent {agent_id} sql SELECT count(*) FROM vuln_cves WHERE status='VALID'")[0]['count(*)']
+
+
 def clean_sys_programs(agent_id='000'):
     """Clean all the agent packages data from the DB
 
