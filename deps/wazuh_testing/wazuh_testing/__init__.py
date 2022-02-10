@@ -12,19 +12,27 @@ from collections import defaultdict
 
 if sys.platform == 'win32':
     WAZUH_PATH = os.path.join("C:", os.sep, "Program Files (x86)", "ossec-agent")
+    WAZUH_LOCAL_INTERNAL_OPTIONS = os.path.join(WAZUH_PATH, 'local_internal_options.conf')
+    WAZUH_CONF = os.path.join(WAZUH_PATH, 'ossec.conf')
 else:
     if sys.platform == 'darwin':
         WAZUH_PATH = os.path.join("/", "Library", "Ossec")
     else:
         WAZUH_PATH = os.path.join("/var", "ossec")
 
+WAZUH_CONF_RELATIVE = os.path.join('etc', 'ossec.conf')
+WAZUH_CONF = os.path.join(WAZUH_PATH, WAZUH_CONF_RELATIVE)
+WAZUH_LOCAL_INTERNAL_OPTIONS = os.path.join(WAZUH_PATH, 'etc', 'local_internal_options.conf')
 CLIENT_KEYS_PATH = os.path.join(WAZUH_PATH, 'etc' if platform.system() == 'Linux' else '', 'client.keys')
 DB_PATH = os.path.join(WAZUH_PATH, 'queue', 'db')
 QUEUE_DB_PATH = os.path.join(WAZUH_PATH, 'queue', 'db')
 QUEUE_SOCKETS_PATH = os.path.join(WAZUH_PATH, 'queue', 'sockets')
 WAZUH_DB_SOCKET_PATH = os.path.join(QUEUE_DB_PATH, 'wdb')
 CVE_DB_PATH = os.path.join(WAZUH_PATH, 'queue', 'vulnerabilities', 'cve.db')
-LOG_FILE_PATH = os.path.join(WAZUH_PATH, 'ossec.log')
+WAZUH_LOGS_PATH = os.path.join(WAZUH_PATH, 'logs')
+LOG_FILE_PATH = os.path.join(WAZUH_LOGS_PATH, 'ossec.log')
+ALERT_FILE_PATH = os.path.join(WAZUH_LOGS_PATH, 'alerts', 'alerts.json')
+ALERT_LOGS_PATH = os.path.join(WAZUH_LOGS_PATH, 'alerts', 'alerts.log')
 
 
 UDP = 'UDP'
