@@ -18,7 +18,8 @@ from py.xml import html
 import wazuh_testing.tools.configuration as conf
 from wazuh_testing import global_parameters, logger
 from wazuh_testing.logcollector import create_file_structure, delete_file_structure
-from wazuh_testing.tools import LOG_FILE_PATH, WAZUH_CONF, get_service, ALERT_FILE_PATH, WAZUH_LOCAL_INTERNAL_OPTIONS
+from wazuh_testing import ALERT_FILE_PATH, ALERT_LOGS_PATH
+from wazuh_testing.tools import LOG_FILE_PATH, WAZUH_CONF, get_service, WAZUH_LOCAL_INTERNAL_OPTIONS
 from wazuh_testing.tools.configuration import get_wazuh_conf, set_section_wazuh_conf, write_wazuh_conf
 from wazuh_testing.tools.file import truncate_file
 from wazuh_testing.tools.monitoring import QueueMonitor, FileMonitor, SocketController, close_sockets
@@ -893,6 +894,20 @@ def truncate_log_files():
 
     for log_file in log_files:
         truncate_file(log_file)
+
+
+@pytest.fixture(scope='function')
+def truncate_alert_files():
+    """Truncate all the alert files before and after the test execution"""
+    alert_files = [ALERT_FILE_PATH, ALERT_LOGS_PATH]
+
+    for alert_file in alert_files:
+        truncate_file(alert_file)
+
+    yield
+
+    for alert_file in alert_files:
+        truncate_file(alert_file)
 
 
 @pytest.fixture(scope='function')
