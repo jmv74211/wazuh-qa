@@ -938,11 +938,12 @@ def mock_system(request):
 
     # Add agent id keyword
     sys_info['agent_query']['agent_id'] = sys_info['agent_query']['id']
-    modify_system(**{ keyword:sys_info['agent_query'][keyword] for keyword in modify_expected_args})
+    modify_system(**{keyword: sys_info['agent_query'][keyword] for keyword in modify_expected_args})
 
     # Add agent id keyword
     sys_info['osinfo_query']['agent_id'] = '000'
-    update_os_info(**{ keyword:sys_info['osinfo_query'][keyword] for keyword in update_expected_args})
+    update_os_info(**{keyword: sys_info['osinfo_query'][keyword] for keyword in update_expected_args})
+
 
 @pytest.fixture(scope='function')
 def mock_system_parametrized(system):
