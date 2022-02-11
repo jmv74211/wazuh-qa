@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import sys
 import uuid
+import inspect
 from datetime import datetime
 
 import pytest
@@ -927,24 +928,21 @@ def mock_system(request):
     """
     system = getattr(request.module, 'mocked_system') if hasattr(request.module, 'mocked_system') else 'RHEL8'
     sys_info = get_system()
-
     set_system(system)
 
     yield
 
-    modify_system(os_name=sys_info['agent_query']['os_name'], os_major=sys_info['agent_query']['os_major'],
-                  name=sys_info['agent_query']['name'], os_minor=sys_info['agent_query']['os_minor'],
-                  os_arch=sys_info['agent_query']['os_arch'], os_version=sys_info['agent_query']['os_version'],
-                  os_platform=sys_info['agent_query']['os_platform'], version=sys_info['agent_query']['version'])
+    # Expected args in db methods
+    modify_expected_args = inspect.getfullargspec(modify_system)[0]
+    update_expected_args = inspect.getfullargspec(update_os_info)[0]
 
-    update_os_info(scan_id=sys_info['osinfo_query']['scan_id'], scan_time=sys_info['osinfo_query']['scan_time'],
-                   hostname=sys_info['osinfo_query']['hostname'], architecture=sys_info['osinfo_query']['architecture'],
-                   os_name=sys_info['osinfo_query']['os_name'], os_version=sys_info['osinfo_query']['os_version'],
-                   os_major=sys_info['osinfo_query']['os_major'], os_minor=sys_info['osinfo_query']['os_minor'],
-                   os_build=sys_info['osinfo_query']['os_build'], version=sys_info['osinfo_query']['version'],
-                   os_release=sys_info['osinfo_query']['os_release'], os_patch=sys_info['osinfo_query']['os_patch'],
-                   release=sys_info['osinfo_query']['release'], checksum=sys_info['osinfo_query']['checksum'])
+    # Add agent id keyword
+    sys_info['agent_query']['agent_id'] = sys_info['agent_query']['id']
+    modify_system(**{ keyword:sys_info['agent_query'][keyword] for keyword in modify_expected_args})
 
+    # Add agent id keyword
+    sys_info['osinfo_query']['agent_id'] = '000'
+    update_os_info(**{ keyword:sys_info['osinfo_query'][keyword] for keyword in update_expected_args})
 
 @pytest.fixture(scope='function')
 def mock_system_parametrized(system):
