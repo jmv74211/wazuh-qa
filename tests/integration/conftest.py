@@ -27,7 +27,6 @@ from wazuh_testing.tools.monitoring import QueueMonitor, FileMonitor, SocketCont
 from wazuh_testing.tools.services import control_service, check_daemon_status, delete_dbs
 from wazuh_testing.tools.time import TimeMachine
 from wazuh_testing import mocking
-from wazuh_testing.mocking import set_system
 from wazuh_testing.db_interface.agent_db import update_os_info
 from wazuh_testing.db_interface.global_db import get_system, modify_system
 
@@ -928,7 +927,7 @@ def mock_system(request):
     """
     system = getattr(request.module, 'mocked_system') if hasattr(request.module, 'mocked_system') else 'RHEL8'
     sys_info = get_system()
-    set_system(system)
+    mocking.set_system(system)
 
     yield
 
@@ -952,18 +951,18 @@ def mock_system_parametrized(system):
     Args:
         system (str): System to set. Available systems in SYSTEM_DATA variable from mocking module.
     """
-    set_system(system)
+    mocking.set_system(system)
     yield
 
 
 @pytest.fixture(scope='function')
 def mock_agent_packages():
-    """Add 10 mocked packages to the agent 000 DB"""
-    package_names = mocking.insert_mocked_packages()
+    """Add 10 mocked packages to the agent 001 DB"""
+    package_names = mocking.insert_mocked_packages(agent_id='001')
 
     yield package_names
 
-    mocking.delete_mocked_packages()
+    mocking.delete_mocked_packages(agent_id='001')
 
 
 @pytest.fixture(scope='function')
@@ -978,10 +977,21 @@ def clean_mocked_agents():
 
 @pytest.fixture(scope='module')
 def mock_agent_module():
-    """
-    Fixture to create a mocked agent in wazuh databases
-    """
-    agent_id = mocking.create_mocked_agent(name="mocked_agent")
+    """Fixture to create a mocked agent in wazuh databases"""
+    agent_id = mocking.create_mocked_agent(name='mocked_agent')
+
+    yield agent_id
+
+    mocking.delete_mocked_agent(agent_id)
+
+
+@pytest.fixture(scope='function')
+def mock_agent_function(request):
+    """Fixture to create a mocked agent in wazuh databases"""
+    system = getattr(request.module, 'mocked_system') if hasattr(request.module, 'mocked_system') else 'RHEL8'
+    agent_data = mocking.SYSTEM_DATA[system] if system in mocking.SYSTEM_DATA else {'name': 'mocked_agent'}
+
+    agent_id = mocking.create_mocked_agent(**agent_data)
 
     yield agent_id
 
