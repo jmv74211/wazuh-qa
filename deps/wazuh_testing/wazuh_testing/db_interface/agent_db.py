@@ -75,10 +75,9 @@ def insert_os_info(agent_id='000', scan_id=int(time()), scan_time=datetime.datet
 
 
 def insert_package(agent_id='000', scan_id=int(time()), format='rpm', name=DEFAULT_PACKAGE_NAME,
-                   priority='', section='Unspecified', size=99, vendor='wazuhintegrationtests', version='1.0.0-1.el7',
-                   architecture='x86_64', multiarch='', description='Wazuh Integration tests mock package',
-                   source='Wazuh Integration tests mock package', location='', triaged=0,
-                   install_time=datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
+                   priority='', section='Unspecified', size=99, vendor='wazuh-mocking', version='1.0.0-1.el7',
+                   architecture='x64', multiarch='', description='Wazuh mocking packages', source='Wazuh QA tests',
+                   location='', triaged=0, install_time=datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
                    scan_time=datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), checksum='dummychecksum',
                    item_id='dummyitemid'):
     """Insert a package in the agent DB.
@@ -209,8 +208,8 @@ def update_os_info(agent_id='000', scan_id=int(time()), scan_time=datetime.datet
     insert_os_info(**locals())
 
 
-def check_vulnerability_scan_inventory(agent_id, package, version, arch, cve, condition, severity='-', cvss2=0,
-                                       cvss3=0):
+def check_vulnerability_scan_inventory(agent_id='000', package='', version='', arch='', cve='', condition='',
+                                       severity='-', cvss2=0, cvss3=0):
     """Check the existence or lack of a vulnerability in the agent's DB.
 
     Args:
@@ -265,3 +264,31 @@ def clean_sys_programs(agent_id='000'):
         agent_id (str): Agent ID.
     """
     clean_table(agent_id, 'sys_programs')
+
+
+def get_vulnerability_status(agent_id='000', package=''):
+    """Check the status of a vulnerability in the agent database table.
+
+    Args:
+        agent_id (str): Agent ID.
+        package (str): Package to be checked.
+    """
+    query = f"agent {agent_id} sql SELECT status FROM vuln_cves WHERE name = '{package}'"
+
+    result = query_wdb(query)[0]['status']
+
+    return result
+
+
+def get_packages_number(agent_id='000', package=''):
+    """Check the number of packages in the agent database table.
+
+    Args:
+        agent_id (str): Agent ID.
+        package (str): Package to be checked.
+    """
+    query = f"agent {agent_id} sql SELECT count(*) FROM sys_programs WHERE name = '{package}'"
+
+    result = query_wdb(query)[0]['count(*)']
+
+    return result

@@ -33,7 +33,7 @@ WAZUH_LOGS_PATH = os.path.join(WAZUH_PATH, 'logs')
 LOG_FILE_PATH = os.path.join(WAZUH_LOGS_PATH, 'ossec.log')
 ALERT_FILE_PATH = os.path.join(WAZUH_LOGS_PATH, 'alerts', 'alerts.json')
 ALERT_LOGS_PATH = os.path.join(WAZUH_LOGS_PATH, 'alerts', 'alerts.log')
-
+CPE_HELPER_PATH = os.path.join(WAZUH_PATH, 'queue', 'vulnerabilities', 'dictionaries', 'cpe_helper.json')
 
 UDP = 'UDP'
 TCP = 'TCP'
