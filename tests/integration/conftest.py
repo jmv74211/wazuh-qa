@@ -966,6 +966,25 @@ def mock_agent_packages():
 
 
 @pytest.fixture(scope='function')
+def mock_agent_packages_from_variable(request, mocked_packages):
+    """Add 10 mocked packages to the agent 001 DB
+
+    Args:
+        request (fixture): built-in fixture that provides information of the requesting test function.
+        packages (list(dict)): List of packages to insert.
+    """
+
+    if mocked_packages is None:
+        raise ValueError('No packages specified')
+
+    mocking.insert_custom_mocked_packages(agent_id='001', packages=mocked_packages)
+
+    yield
+
+    mocking.delete_custom_mocked_packages(agent_id='001')
+
+
+@pytest.fixture(scope='function')
 def clean_mocked_agents():
     """Clean all mocked agents"""
     mocking.delete_all_mocked_agents()

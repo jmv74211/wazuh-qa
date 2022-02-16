@@ -160,6 +160,17 @@ def insert_mocked_packages(agent_id='000', num_packages=10):
     return package_names
 
 
+def insert_custom_mocked_packages(agent_id='000', packages=[]):
+    """Insert specific mocked packages in the specified agent DB.
+
+    Args:
+        agent_id (str): Agent ID.
+        packages (list(dict)): List of packages to insert.
+    """
+    for package in packages:
+        agent_db.insert_package(agent_id=agent_id, name=package['name'], version=package['affected'])
+
+
 def delete_mocked_packages(agent_id='000'):
     """Delete the mocked packages in the agent DB.
 
@@ -169,6 +180,17 @@ def delete_mocked_packages(agent_id='000'):
     package_names = [f"package_{number}" for number in range(1, 11)]
 
     for package_name in package_names:
+        agent_db.delete_package(package=package_name, agent_id=agent_id)
+
+
+def delete_custom_mocked_packages(agent_id='000', packages=[]):
+    """Delete the mocked packages in the specified agent DB.
+
+    Args:
+        agent_id (str): Agent ID.
+        packages (list(tuple)): List of package tuples(name, version) to insert.
+    """
+    for package_name, _ in packages:
         agent_db.delete_package(package=package_name, agent_id=agent_id)
 
 
