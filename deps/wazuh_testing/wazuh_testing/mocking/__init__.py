@@ -170,7 +170,7 @@ def insert_custom_mocked_packages(agent_id='000', packages=[]):
         packages (list(dict)): List of packages to insert.
     """
     for package in packages:
-        agent_db.insert_package(agent_id=agent_id, name=package['name'], version=package['affected'])
+        agent_db.insert_package(agent_id=agent_id, name=package['name'], version=package['version'])
 
 
 def delete_mocked_packages(agent_id='000'):

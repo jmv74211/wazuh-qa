@@ -29,6 +29,7 @@ from wazuh_testing.tools.time import TimeMachine
 from wazuh_testing import mocking
 from wazuh_testing.db_interface.agent_db import update_os_info
 from wazuh_testing.db_interface.global_db import get_system, modify_system
+from wazuh_testing.db_interface.cve_db import insert_vulnerability
 
 
 if sys.platform == 'win32':
@@ -966,13 +967,14 @@ def mock_agent_packages():
 
 
 @pytest.fixture(scope='function')
-def mock_agent_packages_from_variable(request, mocked_packages):
+def mock_agent_packages_from_variable(request):
     """Add 10 mocked packages to the agent 001 DB
 
     Args:
         request (fixture): built-in fixture that provides information of the requesting test function.
         packages (list(dict)): List of packages to insert.
     """
+    mocked_packages = getattr(request.module, 'mocked_packages')
 
     if mocked_packages is None:
         raise ValueError('No packages specified')
@@ -1023,7 +1025,7 @@ def mock_agent_with_custom_system(agent_system):
     if agent_system not in mocking.SYSTEM_DATA:
         raise ValueError(f"{agent_system} is not supported as mocked system for an agent")
 
-    agent_id = mocking.create_mocked_agent(**mocking.SYSTEM_DATA[agent_system] )
+    agent_id = mocking.create_mocked_agent(**mocking.SYSTEM_DATA[agent_system])
 
     yield agent_id
 
