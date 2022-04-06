@@ -11,7 +11,7 @@ from deepdiff import DeepDiff
 
 from wazuh_testing.tools.file import validate_json_file, read_json_file, write_json_file, get_file_lines
 
-WARNING_LIST_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'warning_list.txt')
+WARNING_LIST_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'check_files', 'warning_list.txt')
 
 
 @pytest.fixture
