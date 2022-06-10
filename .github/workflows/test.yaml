@@ -22,7 +22,7 @@ jobs:
         run: echo ${{ steps.updated_files.outputs.added_modified }} > updated_files.txt
 
       - name: test
-        run: apt install -y tree && tree .github
+        run: sudo apt install -y tree && tree .github
 
       - run: |
           # make file runnable, might not be necessary
