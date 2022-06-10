@@ -26,7 +26,7 @@ jobs:
           chmod +x "${GITHUB_WORKSPACE}/.github/workflows_scripts/linter.py"
 
           # run script
-          "${GITHUB_WORKSPACE}/.github/workflows_scripts/linter.py"
+          "python ${GITHUB_WORKSPACE}/.github/workflows_scripts/linter.py"
 
       # - name: Run pycodestyle linter
       #   run: |
