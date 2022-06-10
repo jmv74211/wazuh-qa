@@ -23,3 +23,13 @@ jobs:
           for added_modified_file in "${added_modified_files[@]}"; do
             echo "Do something with this ${added_modified_file}."
           done
+
+      - name: print
+        run: ls -l
+
+      - name: pwd
+        run: pwd
+
+
+      - name: /
+        run: ls /
