@@ -24,6 +24,12 @@ jobs:
       - name: test
         run: sudo apt install -y tree && tree .github
 
+      - name: ls
+        run: ls -la .github/workflows_scripts/
+
+      - name: cat
+        run: cat tree .github/workflows_scripts/linter.py
+
       - run: |
           # make file runnable, might not be necessary
           chmod +x "${GITHUB_WORKSPACE}/.github/workflows_scripts/linter.py"
