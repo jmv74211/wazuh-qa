@@ -7,24 +7,20 @@ jobs:
   test_1:
     runs-on: ubuntu-20.04
     steps:
-      - name: Check python2
-        run: python --version
+      - name: Download files
+        uses: actions/checkout@v3
 
-      - name: Check python3
-        run: python3 --version
+      - name: Install pycodestyle linter
+        run: python -m pip install pycodestyle==2.8.0
 
-      - uses: actions/checkout@v3
+      - id: updated_files
+        uses: jitterbit/get-changed-files@v1
+        with:
+          format: 'csv'
 
-      # - id: files
-      #   name: Print modifies files
-      #   uses: jitterbit/get-changed-files@v1
-      #   with:
-      #     format: 'csv'
-      # - run: |
-      #     mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
-      #     for added_modified_file in "${added_modified_files[@]}"; do
-      #       echo "Do something with this ${added_modified_file}."
-      #     done
-
-      - name: print
-        run: ls -l
+      - name: Run pycodestyle linter
+        run: |
+          mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.updated_files.outputs.added_modified }}')
+          for added_modified_file in "${added_modified_files[@]}"; do
+            pycodestyle --max-line-length=120 ${added_modified_file}
+          done
