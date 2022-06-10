@@ -35,7 +35,7 @@ jobs:
           chmod +x .github/workflows_scripts/linter.py
 
           # run script
-          "python .github/workflows_scripts/linter.py
+          python .github/workflows_scripts/linter.py
 
       # - name: Run pycodestyle linter
       #   run: |
