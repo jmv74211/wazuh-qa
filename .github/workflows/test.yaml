@@ -25,11 +25,4 @@ jobs:
           done
 
       - name: print
-        run: ls -l
-
-      - name: pwd
-        run: pwd
-
-
-      - name: /
-        run: ls /
+        run: cat .github/workflows/test.yaml
