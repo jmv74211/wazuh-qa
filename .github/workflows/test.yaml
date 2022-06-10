@@ -18,9 +18,14 @@ jobs:
         with:
           format: 'csv'
 
-      - name: print
-        run: echo ${{ steps.updated_files.outputs.added_modified }}
+      - name: save
+        run: echo ${{ steps.updated_files.outputs.added_modified }} > updated_files.txt
 
+      - name: print
+        run: cat updated_files.txt
+
+      - name: print
+        run: ls -la
 
       # - name: Run pycodestyle linter
       #   run: |
