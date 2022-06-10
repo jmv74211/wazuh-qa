@@ -1,8 +1,7 @@
 name: Test workflow
 on:
-  push:
-    branches:
-      - master
+  push
+
 jobs:
   test_1:
     runs-on: ubuntu-20.04
@@ -30,16 +29,10 @@ jobs:
       - name: cat
         run: cat .github/workflows_scripts/linter.py
 
-      - run: |
+      - name: Run linter script
+        run: |
           # make file runnable, might not be necessary
           chmod +x .github/workflows_scripts/linter.py
 
           # run script
-          python .github/workflows_scripts/linter.py
-
-      # - name: Run pycodestyle linter
-      #   run: |
-      #     mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.updated_files.outputs.added_modified }}')
-      #     for added_modified_file in "${added_modified_files[@]}"; do
-      #       pycodestyle --max-line-length=120 ${added_modified_file}
-      #     done
+          python .github/workflows_scripts/linter.py --file updated_files.txt
