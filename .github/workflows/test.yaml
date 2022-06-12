@@ -12,27 +12,16 @@ jobs:
       - name: Install pycodestyle linter
         run: python -m pip install pycodestyle==2.8.0
 
-      - id: updated_files
+      - name: Get the updated files
+        id: updated_files
         uses: jitterbit/get-changed-files@v1
         with:
           format: 'csv'
 
-      - name: save
+      - name: Save the updated files data
         run: echo ${{ steps.updated_files.outputs.added_modified }} > updated_files.txt
-
-      - name: test
-        run: sudo apt install -y tree && tree .github
-
-      - name: ls
-        run: ls -la .github/workflows/scripts/
-
-      - name: cat
-        run: cat .github/workflows/scripts/linter.py
 
       - name: Run linter script
         run: |
-          # make file runnable, might not be necessary
           chmod +x .github/workflows/scripts/linter.py
-
-          # run script
           python .github/workflows/scripts/linter.py --file updated_files.txt
