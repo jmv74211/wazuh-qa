@@ -1,9 +1,9 @@
-name: Test workflow
+name: Code analysis
 on:
-  push
+  pull_request
 
 jobs:
-  test_1:
+  python_linting:
     runs-on: ubuntu-20.04
     steps:
       - name: Download files
