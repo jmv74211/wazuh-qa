@@ -24,15 +24,15 @@ jobs:
         run: sudo apt install -y tree && tree .github
 
       - name: ls
-        run: ls -la .github/workflows_scripts/
+        run: ls -la .github/workflows/scripts/
 
       - name: cat
-        run: cat .github/workflows_scripts/linter.py
+        run: cat .github/workflows/scripts/linter.py
 
       - name: Run linter script
         run: |
           # make file runnable, might not be necessary
-          chmod +x .github/workflows_scripts/linter.py
+          chmod +x .github/workflows/scripts/linter.py
 
           # run script
-          python .github/workflows_scripts/linter.py --file updated_files.txt
+          python .github/workflows/scripts/linter.py --file updated_files.txt
